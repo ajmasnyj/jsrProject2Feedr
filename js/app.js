@@ -18,47 +18,51 @@ function addToDOM(data){
   // results of search is response object
   var searchResults = data.response.results;
   // console.log(searchResults[0].webUrl);
-  var articleInfo = {
-    id: [],
-    url: [],
-  }
+  // var articleInfo = {
+  //   id: [],
+  //   url: [],
+  // }
 
   var title = "abc";
   var sectionTitleName = "abc";
-  var template = `<article class="article">\
-                    <section class="featuredImage">\
-                      <img src="images/article_placeholder_1.jpg" alt="" />\
-                    </section>\
-                    <section class="articleContent">\
-                      <a href="#"><h3>${title}</h3></a>\
-                      <h6>${sectionTitleName}</h6>\
-                    </section>\
-                    <section class="impressions">\
-                      526\
-                    </section>\
-                    <div class="clearfix"></div>\
-                  </article>`;
+  // var template = `<article class="article">\
+  //                   <section class="featuredImage">\
+  //                     <img src="images/article_placeholder_1.jpg" alt="" />\
+  //                   </section>\
+  //                   <section class="articleContent">\
+  //                     <a href="#"><h3>${title}</h3></a>\
+  //                     <h6>${sectionTitleName}</h6>\
+  //                   </section>\
+  //                   <section class="impressions">\
+  //                     526\
+  //                   </section>\
+  //                   <div class="clearfix"></div>\
+  //                 </article>`;
 
   // console.log(template);
-
-  var articleElem = $('.article');
+console.log(searchResults);
+  // var articleElem = $('.article');
 // loop through each article returned
   for (var i = 0; i < searchResults.length; i++){
 
     var title = searchResults[i].webTitle;
     console.log(searchResults[i].webTitle);
+    var articleSelectUrl = searchResults[i].webUrl;
     console.log(searchResults[i].webUrl);
+    var articlePubDate = searchResults[i].webPublicationDate
 
     // var articleDataAttrib = $(searchResults[i]).attr('data-article', `${data.id[i]}`);
 
     var sectionTitleName = searchResults[i].sectionName;
-    var template = `<article class="article">\
+
+    var template = `<article class="article" data-url="${articleSelectUrl}">\
                       <section class="featuredImage">\
                         <img src="images/article_placeholder_1.jpg" alt="" />\
                       </section>\
                       <section class="articleContent">\
                         <a href="#"><h3>${title}</h3></a>\
                         <h6>${sectionTitleName}</h6>\
+                        <h6>${articlePubDate}</h6>\
                       </section>\
                       <section class="impressions">\
                         526\
@@ -66,11 +70,11 @@ function addToDOM(data){
                       <div class="clearfix"></div>\
                     </article>`;
 // add id and url info to articleInfo array
-    articleInfo.id.push(searchResults[i].id);
-    articleInfo.url.push(searchResults[i].webUrl);
+    // articleInfo.id.push(searchResults[i].id);
+    // articleInfo.url.push(searchResults[i].webUrl);
     // console.log(articleInfo.id);
 
-    $("body").append($(template));
+    $("#main").append($(template));
 
 // When the user selects an article's title show the `#popUp` overlay.
     $('.article h3').on('click',function(event) {
@@ -95,10 +99,10 @@ function addToDOM(data){
       // console.log(articleBlurb);
       // var articleBlurb = this.articleContent.str.substring(0,500) + "...";
 
-      $('#popUp p')[0].innerHTML = $(this).text();
+      $('#popUp p')[0].innerHTML = $(this).parents('.article').attr("data-content");
 
 // Change the link of the "Read more from source" button to that of the respective article.
-      $('.popUpAction').attr("href", searchResults[0].webUrl);
+      $('.popUpAction').attr("href", $(this).parents('.article').attr("data-url"));
 
     });
 
